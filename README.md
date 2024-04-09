@@ -34,6 +34,14 @@ go build
 2024/04/09 18:16:39 INFO Stats: throughput=100000 avg_latency:=727.427µs
 ```
 
+## Notes
+
+When running many requests in random mode, CQL will overwrite entries with
+the same value. This can cause the table to display a smaller number of entries.
+To assess the exact amount of entries is are being written, use the `-serial` flag.
+This implies the use of the `-save` flag to preverse database content.
+
+
 ## Help
 
 ```
@@ -46,6 +54,8 @@ Usage of ./cql_stress:
     	Number of consecutive runs (default 1)
   -save
     	Preserve test data
+  -serial
+    	Use serial values instead of random generated
   -server string
     	ScyllaDB IP:port (default "localhost:9042")
 ```

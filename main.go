@@ -16,6 +16,7 @@ func main() {
 		rate        int
 		save        bool
 		server      string
+		serial      bool
 	)
 
 	flag.IntVar(&rate, "rate-limit", 1, "Number of requests per second")
@@ -23,6 +24,7 @@ func main() {
 	flag.IntVar(&runs, "runs", 1, "Number of consecutive runs")
 	flag.BoolVar(&save, "save", false, "Preserve test data")
 	flag.StringVar(&server, "server", "localhost:9042", "ScyllaDB IP:port")
+	flag.BoolVar(&serial, "serial", false, "Use serial values instead of random generated")
 
 	flag.Parse()
 
@@ -31,7 +33,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	insertFunction := rz.GetInsertFunction()
+	var insertFunction func() error
+
+	if serial {
+		insertFunction = rz.GetSerialInsertFunction()
+	} else {
+		insertFunction = rz.GetRandomInsertFunction()
+	}
 
 	r := ralpe.NewRalpe(insertFunction, rate, parallelism, rate*runs)
 
