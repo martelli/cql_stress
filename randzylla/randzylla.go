@@ -2,7 +2,7 @@ package randzylla
 
 import (
 	"fmt"
-	"sync/atomic"
+	"math/rand"
 
 	"github.com/gocql/gocql"
 )
@@ -15,7 +15,6 @@ const (
 
 type randzylla struct {
 	session *gocql.Session
-	serial  atomic.Uint32
 }
 
 func NewRandzylla(addr string) (*randzylla, error) {
@@ -69,7 +68,7 @@ func (r *randzylla) GetInsertFunction() func() error {
 	query := fmt.Sprintf("INSERT INTO %s (id) VALUES (?)", TEST_TABLENAME)
 
 	f := func() error {
-		return r.session.Query(query, r.serial.Add(1)).Exec()
+		return r.session.Query(query, rand.Int31()).Exec()
 	}
 
 	return f

@@ -1,3 +1,11 @@
+## Design
+
+`ralpe` (rate limited parallel executor) allows you to run any
+function of type `func() error` in parallel batches.
+
+`randzylla` will create a keyspace in the ScyllaDB and provide
+a function to insert a random into the database. 
+
 ## Execution
 
 1. Run ScyllaDB under docker:
