@@ -4,8 +4,8 @@ import (
 	"flag"
 	"log"
 
-	"cql_stress/ralpe"
-	"cql_stress/randzylla"
+	"cql_ratelim/ralpe"
+	"cql_ratelim/randzylla"
 )
 
 func main() {
@@ -15,16 +15,18 @@ func main() {
 		parallelism int
 		rate        int
 		save        bool
+		scylladb    string
 	)
 
 	flag.IntVar(&rate, "rate-limit", 1, "Number of requests per second")
 	flag.IntVar(&parallelism, "parallelism", 1, "Number of parallel workers")
 	flag.IntVar(&runs, "runs", 1, "Number of consecutive runs")
 	flag.BoolVar(&save, "save", false, "Preserve test data")
+	flag.StringVar(&server, "server", "localhost:9042", "ScyllaDB IP:port")
 
 	flag.Parse()
 
-	rz, err := randzylla.NewRandzylla("localhost:9042")
+	rz, err := randzylla.NewRandzylla(server)
 	if err != nil {
 		log.Fatal(err)
 	}
