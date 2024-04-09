@@ -14,6 +14,7 @@ type ralpe struct {
 	num_workers   int
 	total_jobs    int
 	wg            sync.WaitGroup
+	counters      map[int]*atomic.Uint64
 	ch            chan bool
 	fun           func() error
 	clock         clockwork.Clock
@@ -31,9 +32,11 @@ func NewRalpe(fun func() error, rate, parallel, total int) *ralpe {
 		ch:          make(chan bool, rate),
 		clock:       clockwork.NewRealClock(),
 	}
+	r.counters = make(map[int]*atomic.Uint64)
 
 	for i := range parallel {
 		r.wg.Add(1)
+		r.counters[i] = &atomic.Uint64{}
 		go r.worker(i)
 	}
 	return r
@@ -54,6 +57,7 @@ func (r *ralpe) worker(id int) {
 		}
 		latency := time.Now().Sub(start)
 		r.inflight.Add(-1)
+		r.counters[id].Add(1)
 		r.completed.Add(1)
 		r.accum_latency.Add(uint64(latency))
 	}

@@ -33,7 +33,7 @@ func NewRandzylla(addr string) (*randzylla, error) {
 		return nil, err
 	}
 
-	q_keyspace := fmt.Sprintf("create keyspace %s WITH REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor' : 1}", TEST_KEYSPACE)
+	q_keyspace := fmt.Sprintf("CREATE KEYSPACE %s WITH REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor' : 1}", TEST_KEYSPACE)
 	if err = r.session.Query(q_keyspace).Exec(); err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func NewRandzylla(addr string) (*randzylla, error) {
 		return nil, err
 	}
 
-	q_drop_table := fmt.Sprintf("drop TABLE IF EXISTS %s", TEST_TABLENAME)
+	q_drop_table := fmt.Sprintf("DROP TABLE IF EXISTS %s", TEST_TABLENAME)
 	if err = r.session.Query(q_drop_table).Exec(); err != nil {
 		return nil, err
 	}
@@ -58,7 +58,7 @@ func NewRandzylla(addr string) (*randzylla, error) {
 }
 
 func (r *randzylla) TearDown() error {
-	q_drop := fmt.Sprintf("drop KEYSPACE IF EXISTS %s", TEST_KEYSPACE)
+	q_drop := fmt.Sprintf("DROP KEYSPACE IF EXISTS %s", TEST_KEYSPACE)
 	if err := r.session.Query(q_drop).Exec(); err != nil {
 		return err
 	}
