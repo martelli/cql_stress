@@ -28,6 +28,7 @@ go build
 
 ## Help
 
+```
 Usage of ./cql_stress:
   -parallelism int
     	Number of parallel workers (default 1)
@@ -39,3 +40,4 @@ Usage of ./cql_stress:
     	Preserve test data
   -server string
     	ScyllaDB IP:port (default "localhost:9042")
+```
