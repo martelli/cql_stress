@@ -36,10 +36,10 @@ go build
 
 ## Notes
 
-When running many requests in random mode, CQL will overwrite entries with
+When running many requests in random mode, the cql driver will overwrite entries with
 the same value. This can cause the table to display a smaller number of entries.
-To assess the exact amount of entries is are being written, use the `-serial` flag.
-This implies the use of the `-save` flag to preverse database content.
+To assess the exact amount of entries is being written, use the `-serial` flag.
+This assumes also the use of the `-save` flag to preverse database content.
 
 
 ## Help
