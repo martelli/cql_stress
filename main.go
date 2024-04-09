@@ -15,7 +15,7 @@ func main() {
 		parallelism int
 		rate        int
 		save        bool
-		scylladb    string
+		server      string
 	)
 
 	flag.IntVar(&rate, "rate-limit", 1, "Number of requests per second")
