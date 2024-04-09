@@ -50,7 +50,7 @@ func NewRandzylla(addr string) (*randzylla, error) {
 		return nil, err
 	}
 
-	create_query := fmt.Sprintf("CREATE TABLE %s (id int PRIMARY KEY)", TEST_TABLENAME)
+	create_query := fmt.Sprintf("CREATE TABLE %s (id INT PRIMARY KEY, va INT, vb INT, vc INT)", TEST_TABLENAME)
 	if err = r.session.Query(create_query).Exec(); err != nil {
 		return nil, err
 	}
@@ -66,22 +66,36 @@ func (r *randzylla) TearDown() error {
 	return nil
 }
 
-func (r *randzylla) GetRandomInsertFunction() func() error {
-	query := fmt.Sprintf("INSERT INTO %s (id) VALUES (?)", TEST_TABLENAME)
+func (r *randzylla) getInsertFunction(valuesFunc func() []any) func() error {
+	query := fmt.Sprintf("INSERT INTO %s (id, va, vb, vc) VALUES (?,?,?,?)", TEST_TABLENAME)
 
 	f := func() error {
-		return r.session.Query(query, rand.Int31()).Exec()
+		return r.session.Query(query, valuesFunc()...).Exec()
 	}
 
 	return f
 }
 
-func (r *randzylla) GetSerialInsertFunction() func() error {
-	query := fmt.Sprintf("INSERT INTO %s (id) VALUES (?)", TEST_TABLENAME)
-
-	f := func() error {
-		return r.session.Query(query, r.serial.Add(1)).Exec()
+func (r *randzylla) GetRandomInsertFunction() func() error {
+	randomValues := func() []any {
+		return []any{
+			rand.Int31(),
+			rand.Int31(),
+			rand.Int31(),
+			rand.Int31(),
+		}
 	}
+	return r.getInsertFunction(randomValues)
+}
 
-	return f
+func (r *randzylla) GetSerialInsertFunction() func() error {
+	serialValues := func() []any {
+		return []any{
+			r.serial.Add(1),
+			r.serial.Add(1),
+			r.serial.Add(1),
+			r.serial.Add(1),
+		}
+	}
+	return r.getInsertFunction(serialValues)
 }
