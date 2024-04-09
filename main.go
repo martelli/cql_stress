@@ -4,8 +4,8 @@ import (
 	"flag"
 	"log"
 
-	"cql_ratelim/ralpe"
-	"cql_ratelim/randzylla"
+	"cql_stress/ralpe"
+	"cql_stress/randzylla"
 )
 
 func main() {
