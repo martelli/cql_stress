@@ -41,6 +41,16 @@ the same value. This can cause the table to display a smaller number of entries.
 To assess the exact amount of entries is being written, use the `-serial` flag.
 This assumes also the use of the `-save` flag to preverse database content.
 
+## Resource limiting and result sample
+
+To limit the amount of CPU used on both server and client, we can do:
+
+- start scylladb instance we can add `--smp 1`.
+- do `export GOMAXPROCS=1` before calling the cli tool.
+
+By using these on AMD Ryzen 7 3700X, we verified average throughput of 100k writes/s
+with an average latency around 1ms, while CPU stays around 80% utilization for each
+process.
 
 ## Help
 
